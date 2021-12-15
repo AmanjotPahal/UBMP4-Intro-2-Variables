@@ -23,10 +23,13 @@
 
 // Program constant definitions
 const unsigned char maxCount = 50;
+#define pressed 0
+#define notPressed 1
 
 // Program variable definitions
 unsigned char SW2Count = 0;
 bool SW2Pressed = false;
+
 
 int main(void)
 {
@@ -37,15 +40,29 @@ int main(void)
     // Code in this while loop runs repeatedly.
     while(1)
 	{
-        // Count SW2 button presses
-        if(SW2 == 0 && SW2Pressed == false)
+       // Count new SW2 button presses
+        if(SW2 == pressed && SW2Pressed == false)
         {
             LED3 = 1;
-            SW2Pressed = true;
             if(SW2Count < 255)
             {
                 SW2Count = SW2Count + 1;
             }
+            SW2Pressed = true;
+        }
+
+        // Clear pressed state if released
+        if(SW2 == notPressed)
+        {
+            LED3 = 0;
+            SW2Pressed = false;
+        }
+
+        // Clear pressed state if released
+        if(SW2 == 1)
+        {
+            LED3 = 0;
+            SW2Pressed = false;
         }
 
         // Clear pressed state if released

@@ -22,13 +22,15 @@
 // TODO Set linker code offset to '800' under "Additional options" pull-down.
 
 // Program constant definitions
-const unsigned char maxCount = 50;
+const unsigned char maxCount = 10;
 #define pressed 0
 #define notPressed 1
 
 // Program variable definitions
 unsigned char SW2Count = 0;
 bool SW2Pressed = false;
+unsigned char SW5Count = 0;
+bool SW5Pressed = false;
 
 
 int main(void)
@@ -40,15 +42,26 @@ int main(void)
     // Code in this while loop runs repeatedly.
     while(1)
 	{
-       // Count new SW2 button presses
+       // Count SW2 button presses for player 1 
         if(SW2 == pressed && SW2Pressed == false)
         {
             LED3 = 1;
+            SW2Pressed = true;
             if(SW2Count < 255)
             {
-                SW2Count = SW2Count + 1;
+               SW2Count += 1;
             }
-            SW2Pressed = true;
+        }
+       
+         // Count SW5 button presses for player 2 
+        if(SW5 == pressed && SW5Pressed == false)
+        {
+            LED6 = 1;
+            SW5Pressed = true;
+            if(SW5Count < 255)
+            {
+               SW5Count += 1;
+            }
         }
 
         // Clear pressed state if released
@@ -56,6 +69,31 @@ int main(void)
         {
             LED3 = 0;
             SW2Pressed = false;
+        }
+
+        if(SW2Count >= maxCount)
+        {
+            LED4 = 1;
+            while ( SW3 == notPressed && SW4 == notPressed)
+            {
+                __delay_ms(20);
+            }
+        }
+
+        if(SW5Count >= maxCount)
+        {
+            LED5 = 1;
+              while ( SW3 == notPressed && SW4 == notPressed)
+            {
+                __delay_ms(20);
+            }
+        }
+
+         // Clear  player 2 pressed state if released
+        if(SW5 == notPressed)
+        {
+            LED6 = 0;
+            SW5Pressed = false;
         }
 
         // Clear pressed state if released
@@ -73,10 +111,12 @@ int main(void)
         }
         
         // Reset count and turn off LED D4
-        if(SW3 == 0)
+        if(SW3 == 0 || SW4 == pressed)
         {
             LED4 = 0;
+            LED5 = 0;
             SW2Count = 0;
+            SW5Count = 0;
         }
         
         // Add a short delay to the main while loop.

@@ -42,6 +42,8 @@ int main(void)
     // Code in this while loop runs repeatedly.
     while(1)
 	{
+        /* Rapid clicker game */
+        /* 
        // Count SW2 button presses for player 1 
         if(SW2 == pressed && SW2Pressed == false)
         {
@@ -118,8 +120,22 @@ int main(void)
             SW2Count = 0;
             SW5Count = 0;
         }
-        
-        // Add a short delay to the main while loop.
+        */
+
+
+        // SW2 toggle button code.
+         if(SW2 == pressed && SW2Pressed == false)
+        {
+            SW2Pressed = true;
+            LED3 = !LED3;
+        }
+
+         // Clear toggle state when toggle button is released
+        if(SW2 == notPressed)
+        {
+            SW2Pressed = false;
+        }
+       
         __delay_ms(10);
         
         // Activate bootloader if SW1 is pressed.
